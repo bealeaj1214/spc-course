@@ -1,0 +1,177 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+%\usepackage{listings}
+
+% attempt to use fontspec to select fonts 
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+
+\title{Statistical Process Control : Session \# 1 }
+\author{Alan Beale}
+\date{January 20, 2011}
+\begin{document}
+
+\sffamily 
+\maketitle
+
+\SweaveOpts{prefix.string=tex/sessionNotes1}
+
+
+\section*{Reading -4.6}
+
+ p 82 \\
+ \begin{itemize}
+ \item process mean - $ u $ 
+ \item limits -  $ u \pm 3\sigma_{\bar{x}}  $
+ \end{itemize}
+ How does this relate to the term 6 sigma.\\
+ 
+ \begin{itemize}
+ \item $ \bar{X}  $ - sample average
+ \item $  \sigma_{\bar{x}}  $ - standard deviation of sample average
+ \end{itemize}
+
+  p. 82  - 3 sigma limits
+  
+  p. 84 -
+  
+  Do s and $ \sigma_{\bar{x}}  $ represent the same quantity in the text?
+  
+  statistical quality control - (SPC) abbrev
+
+    
+\begin{itemize}
+\item  $\bar{\bar{X}} $  -overall average
+\end{itemize}
+
+ Table E.  of the Appendix on page 540.
+ 
+ Esimates for sigma  
+\begin{itemize}
+\item $ \hat{\sigma} = \frac{\bar{R}}{d_{2}} $ - is estimate for $\sigma$
+\item $ \hat{\sigma} = \frac{\bar{s}}{c_{4}}  $
+\item $  \hat{\sigma_{\bar{x}}} = \frac{\frac{\bar{R}}{d_{2}}}{\sqrt{n}} $
+\end{itemize}
+
+LCL \& UCL  - horizontal lines
+
+\section*{Question 1}
+<<setup,echo=false>>=
+library("ggplot2")
+@ 
+
+<<q1_setup,echo=false>>=
+q1 <-read.csv("data/Assigment1Q1.csv")
+@ 
+
+<<q1_work>>=
+q1
+mean(q1)
+
+@ 
+
+ $ LCL =D_{3}\bar{R} $\  \ \   $   UCL =D_{4}\bar{R}    $ \\
+ $ D_{3_{n=5}} =0  $ \  \ \   $     D_{4_{n=5}} =2.115   $
+
+<<q1_work_ucl>>=
+ UCL = 2.115 * mean(q1$R)
+ UCL
+
+@ 
+
+$ \bar{\bar{x}} = A_{3} * \bar{R} $ 
+
+
+$ A_{3_{n=5}} = 1.427 $ \\
+
+
+ 
+\begin{tabular}{@{}lrr@{}} \toprule
+ R bar & LCL & UCL \\ \midrule
+ 3.85 & 0 & 8.143 \\
+ %%X bar & NA & NA \\
+  \bottomrule
+\end{tabular}
+
+
+<<q2_work_xbar>>=
+Rbar = mean(q1$R)
+Rbar
+
+xdoublebar = mean(q1$xBar)
+xdoublebar
+
+three_sigma = 1.427*Rbar
+three_sigma
+
+lcl = xdoublebar - three_sigma
+lcl
+
+hcl = xdoublebar + three_sigma
+hcl
+@ 
+
+
+\begin{tabular}{@{}lrr@{}} \toprule
+ X bar & LCL & UCL \\ \midrule
+%% R bar & 0 & 8.143 \\
+  19.85 & 14.36 & 25.34 \\
+  \bottomrule
+\end{tabular}
+
+
+<<q1_rbar_plot,fig=T,eps=F,echo=F>>=
+plot=ggplot(q1) +geom_point(aes_string(x="number",y="R")) + 
+  geom_hline(aes(yintercept=0))+ geom_hline(aes(yintercept=8.143))+
+  geom_hline(aes(yintercept=3.85))+ ylab("Range")+xlab("Subgroup number")+
+  theme_bw()+opts(title="R bar chart")+ylim(0,9) 
+print(plot)
+@ 
+
+
+
+<<q1_xbarbar_plot,fig=T,eps=F,echo=F>>=
+plot=ggplot(q1) +geom_point(aes_string(x="number",y="xBar")) + 
+  ylab("Subgroup average")+xlab("Subgroup number")+
+  geom_hline(aes(yintercept=14.36))+ geom_hline(aes(yintercept=25.34))+
+  geom_hline(aes(yintercept=19.85)) +
+  theme_bw()+opts(title="X double bar chart") +ylim(5,30)
+print(plot)
+@ 
+
+
+\section*{Question 2}
+
+<<q2_setup>>=
+q2=
+  c(14.2,14.1,14.5,14.1,15.7,
+    15.3,13.9,14.8,14.7,15.1,
+    14.4,13.7,14.0,13.5,13.9,
+    13.6,14.4,13.9,13.8,14.2,
+    13.2,15.1,13.5,14.2,14.3)
+
+sd(q2)
+s =sd(q2)
+mean(q2)
+x=mean(q2)
+d2=1.128
+c4=0.9896
+ abs(diff(q2))
+mean(abs(diff(q2)) )
+mr_bar = mean(abs(diff(q2)) )
+
+s/c4
+limits_s =c (x -3*s/c4 , x+3*s/c4 ) 
+limits_s
+
+limits_mr =c(x - 3*mr_bar/d2  , x+ 3+mr_bar/d2)
+limits_mr 
+@ 
+
+
+\section*{Question 3}
+\section*{Question 4}
+
+\end{document}

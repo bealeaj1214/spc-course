@@ -1,0 +1,5 @@
+*.pdf
+/generated
+/tex
+*~
+session-notes1.tex
