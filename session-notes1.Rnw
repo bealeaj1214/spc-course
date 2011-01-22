@@ -89,7 +89,7 @@ $ A_{3_{n=5}} = 1.427 $ \\
 
  
 \begin{tabular}{@{}lrr@{}} \toprule
- R bar & LCL & UCL \\ \midrule
+ \(\bar{R}\) & LCL & UCL \\ \midrule
  3.85 & 0 & 8.143 \\
  %%X bar & NA & NA \\
   \bottomrule
@@ -115,7 +115,7 @@ hcl
 
 
 \begin{tabular}{@{}lrr@{}} \toprule
- X bar & LCL & UCL \\ \midrule
+ \(\bar{\bar{X}}\) & LCL & UCL \\ \midrule
 %% R bar & 0 & 8.143 \\
   19.85 & 14.36 & 25.34 \\
   \bottomrule
@@ -170,6 +170,14 @@ limits_mr =c(x - 3*mr_bar/d2  , x+ 3+mr_bar/d2)
 limits_mr 
 @ 
 
+\begin{tabular}{@{}lrrr@{}} \toprule
+ method &\(\bar{x}\) & LCL & UCL \\ \midrule
+ \(\frac{s}{c_{4}}\)& 14.24 & 12.40 & 16.09 \\
+ \(\bar{MR}\)& 14.24 & 12.50 & 17.82 \\
+  \bottomrule
+\end{tabular}
+
+\paragraph{TODO  create chart}
 
 \section*{Question 3}
 \section*{Question 4}
