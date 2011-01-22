@@ -180,6 +180,32 @@ limits_mr
 \paragraph{TODO  create chart}
 
 \section*{Question 3}
+
+<<q3_setup>>=
+
+sum(c(14,12,12,11,13))
+total =sum(c(14,12,12,11,13))
+
+prop.test(total,5000,p=0.0106)
+@ 
 \section*{Question 4}
+
+<<q4_setup>>=
+q4.dataset =c(
+  6,7,3,5,2,2,
+  3,8,4,6,4,9,
+  4,5,5,8,4,2,
+  3,3,8,3,10,5,
+  8,4,7,2,6,6)
+
+mean(q4.dataset)
+
+c_bar = mean(q4.dataset)
+
+c_bar < 9
+
+c_bar > 3*sqrt(c_bar)
+
+@ 
 
 \end{document}
