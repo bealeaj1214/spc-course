@@ -19,11 +19,11 @@
 
 \SweaveOpts{prefix.string=tex/assignment1}
 
-<<setup_assigment,echo=F>>=
+<<setup_assignment,echo=F>>=
 library("ggplot2")
 @ 
 \section*{Question 1}
-\subsection*{formula}
+\subsection*{formulas}
   
 \begin{itemize}
 \item $ \bar{R} $ control limits formulas
@@ -119,7 +119,7 @@ q2.dataset <- data.frame(obs=(1:25),value=q2)
 \end{table*}
 
 
-<<q2_xchar_plot,fig=T,eps=F,echo=F>>=
+<<q2_xchart_plot,fig=T,eps=F,echo=F>>=
 
 plot.q2 =ggplot(q2.dataset,aes_string(x="obs",y="value")) +geom_line() +geom_point()+
   geom_hline(aes(yintercept=12.40,linetype=2))+ geom_hline(aes(yintercept=14.24))+
@@ -136,21 +136,61 @@ total =sum(c(14,12,12,11,13))
 
 prop.test(total,5000,p=0.0106)
 
+
+p=0.0106
+
+ (0.0124 -p) / sqrt(p*(1-p)/30)
+
 @ 
 
 \subsection*{results}
 
-Does this provide evidence that p has increased? \\
- I don't think so.  I used the proportion test to check the null hypothesis that the true proportion $ p = 0.0106 $.  The p-value of 24\% indicates that 24 times out of 100 we expect to measure a sample propotion of 0.0124 under the give conditions.
+Does this provide evidence that p has increased?
+
+ Five consecutive above average provides enough evidence to pose the question but is insufficient evidence to indicate an increase in p. I calculated the z-score of the average p for the last 5 readings. The resulting z-score is less than 3.
+ 
 
 Can runs criteria be easily used here?  
 
+
+Yes but runs criteria has a higher false alarm rate than the Shewhart
+chart.
+  
+
+
+
 If so, what would the use of runs criteria suggest?
+
+
+The runs criteria is 7 consecutive point above the mid-line and a
+number of points above the 1 sigma limit.  There are only 5
+consecutive points about the mid-line so this data does not meet the
+runs criteria.
+  
 \section*{Question 4}
 \subsection*{part a}
+Could either a c chart or u chart be used here? 
+
+Since the number of inspection unit 100 remains constant through out the 30m day period, a c chart should be used.  A u chart should be used when the number of inspection units varies.
+
 \subsection*{part b}
+If a c chart is used, will the LCL exist?
 \subsubsection*{formula}
+ $ 5  \le \bar{c} \le 9 $
 \subsubsection*{work}
+
+<<q4_work>>=
+q4.dataset =c(
+  6,7,3,5,2,2,
+  3,8,4,6,4,9,
+  4,5,5,8,4,2,
+  3,3,8,3,10,5,
+  8,4,7,2,6,6)
+
+mean(q4.dataset)
+
+@ 
 \subsubsection*{results}
+Since \(\bar{c}\) is greater than 5 and less than 9, LCL will not exist.
 
 \end{document}
