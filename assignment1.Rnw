@@ -1,0 +1,156 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+%\usepackage{listings}
+
+% attempt to use fontspec to select fonts 
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\title{SPC: Assigment 1}
+\author{Alan Beale}
+\date{January 23, 2011}
+\begin{document}
+
+\sffamily 
+\maketitle
+
+\SweaveOpts{prefix.string=tex/assignment1}
+
+<<setup_assigment,echo=F>>=
+library("ggplot2")
+@ 
+\section*{Question 1}
+\subsection*{formula}
+  
+\begin{itemize}
+\item $ \bar{R} $ control limits formulas
+    
+\begin{itemize}
+\item $ LCL =D_{3}\bar{R} $
+\item $ UCL =D_{4}\bar{R}    $
+\end{itemize}
+\item $ \bar{\bar{X}} $ control limits formula
+    
+\begin{itemize}
+\item $ \bar{\bar{X}} \pm A_{3}\bar{R}$ 
+\end{itemize}
+
+\end{itemize}
+
+\subsection*{work}
+
+<<q1_setup,echo=F>>=
+q1.dataset <-read.csv("data/Assigment1Q1.csv")
+@ 
+
+
+\begin{table*}[h]
+  \ra{1.3}
+\begin{tabular}{@{}lrrr@{}} \toprule
+ & \(A_3\) & \(D_3\) & \(D_4 \)  \\ \midrule
+ n = 5 & 1.427 & 0 & 2.115 \\  \bottomrule
+\end{tabular}
+\caption{Excerpted Control Constants from Table E - p. 540 }
+\end{table*}
+
+
+<<q1_work>>=
+mean(q1.dataset)
+
+R_bar = mean(q1.dataset$R)
+R_bar
+
+r_bar_UCL = 2.115 * R_bar
+r_bar_UCL
+
+
+x_barbar =mean(q1.dataset$xBar)
+x_barbar
+
+three_sigma =1.427 *R_bar
+three_sigma
+
+c(x_barbar - three_sigma, x_barbar+ three_sigma)
+@ 
+
+\subsection*{results}
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}lrrr@{}} \toprule
+ & mean & LCL & UCL  \\ \midrule
+ \(\bar{R} \) & 3.85 & 0 & 8.14 \\
+ \(\bar{\bar{X}}\) & 19.85 & 14.36 & 25.34 \\
+  \bottomrule
+\end{tabular}
+\caption{Control limits for \(\bar{R}\) and \(\bar{\bar{X}}\) charts }
+\end{table*}
+
+
+\section*{Question 2}
+\subsection*{formula}
+  
+ X Chart control limit formula using s
+  \begin{itemize}
+  \item  \( \bar{x} \pm 3{\frac{s}{c_4}}  \)
+  \end{itemize}
+%%\end{itemize}
+
+\subsection*{work}
+<<q2_work>>=
+source("q2Setup.R")
+q2.dataset <- data.frame(obs=(1:25),value=q2)
+
+#str(q2.dataset)
+@ 
+\subsection*{results}
+
+\begin{table*}[h]
+  \ra{1.3}
+\begin{tabular}{@{}rrrr@{}} \toprule
+ \(\bar{X} \) & \(\frac{s}{c_4} \) & LCL & UCL  \\ \midrule
+ 14.24 & 0.615 & 12.40 & 16.09 \\
+  \bottomrule
+\end{tabular}
+\caption{critical values for question \# 2 X chart }
+\end{table*}
+
+
+<<q2_xchar_plot,fig=T,eps=F,echo=F>>=
+
+plot.q2 =ggplot(q2.dataset,aes_string(x="obs",y="value")) +geom_line() +geom_point()+
+  geom_hline(aes(yintercept=12.40,linetype=2))+ geom_hline(aes(yintercept=14.24))+
+  geom_hline(aes(yintercept=16.09,linetype=4))+ ylab("Individual value")+xlab("Observation number")+
+  theme_bw()+opts(title="X chart for question 2 data")+ylim(12,16.5) 
+print(plot.q2)
+@ 
+\section*{Question 3}
+\subsection*{work}
+
+<<q3_work>>=
+sum(c(14,12,12,11,13))
+total =sum(c(14,12,12,11,13))
+
+prop.test(total,5000,p=0.0106)
+
+@ 
+
+\subsection*{results}
+
+Does this provide evidence that p has increased? \\
+ I don't think so.  I used the proportion test to check the null hypothesis that the true proportion $ p = 0.0106 $.  The p-value of 24\% indicates that 24 times out of 100 we expect to measure a sample propotion of 0.0124 under the give conditions.
+
+Can runs criteria be easily used here?  
+
+If so, what would the use of runs criteria suggest?
+\section*{Question 4}
+\subsection*{part a}
+\subsection*{part b}
+\subsubsection*{formula}
+\subsubsection*{work}
+\subsubsection*{results}
+
+\end{document}
