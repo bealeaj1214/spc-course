@@ -103,7 +103,7 @@ Rbar
 xdoublebar = mean(q1$xBar)
 xdoublebar
 
-three_sigma = 1.427*Rbar
+three_sigma = 0.577*Rbar
 three_sigma
 
 lcl = xdoublebar - three_sigma
@@ -117,7 +117,7 @@ hcl
 \begin{tabular}{@{}lrr@{}} \toprule
  \(\bar{\bar{X}}\) & LCL & UCL \\ \midrule
 %% R bar & 0 & 8.143 \\
-  19.85 & 14.36 & 25.34 \\
+  19.85 & 17.63 & 22.07 \\
   \bottomrule
 \end{tabular}
 
@@ -133,10 +133,11 @@ print(plot)
 
 
 <<q1_xbarbar_plot,fig=T,eps=F,echo=F>>=
+  hline.data <- data.frame(z=c(17.63,22.07,19.95),hue=c("blue","blue","red"))
 plot=ggplot(q1) +geom_point(aes_string(x="number",y="xBar")) + 
   ylab("Subgroup average")+xlab("Subgroup number")+
-  geom_hline(aes(yintercept=14.36))+ geom_hline(aes(yintercept=25.34))+
-  geom_hline(aes(yintercept=19.85)) +
+  geom_hline(aes(yintercept=z,colour=hue),hline.data)+ 
+  scale_colour_identity() +
   theme_bw()+opts(title="X double bar chart") +ylim(5,30)
 print(plot)
 @ 
