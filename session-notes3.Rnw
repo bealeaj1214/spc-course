@@ -1,0 +1,91 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xfrac}
+%\usepackage{listings}
+
+% attempt to use fontspec to select fonts 
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+
+\title{Statistical Process Control : Session \# 3 }
+\author{Alan Beale}
+\date{January 30, 2011}
+\begin{document}
+
+\sffamily 
+\maketitle
+
+\SweaveOpts{prefix.string=tex/sessionNotes3}
+
+\section*{Question 1}
+An experimenter has collected 40 samples of size 250 for the purpose of constructing trial control limits on a p-chart and finds that p-bar = .016.
+ 
+
+
+
+
+\renewcommand{\labelenumi}{\alph{enumi}}
+\begin{enumerate}
+\item What motivation, if any, would there be for using a transformation such as $ y = arcsin(\sqrt{\sfrac{(x+\sfrac{3}{8})}{(n+\sfrac{3}{4})}})  $ for this problem? 
+  \item Determine the control limits using that transformation.
+\end{enumerate}
+
+a.	What motivation, if any, would there be for using a transformation such as y = sin-1 √[(x+3/8) / (n+3/4)] for this problem? b.	Determine the control limits using that transformation.
+
+\renewcommand{\labelenumi}{\arabic{enumi}}
+
+\subsection*{answer}
+
+\subsubsection*{part a}
+ In general the LCL generated from the untranformed binomial model has a tail area less than .00135. The tranform is used to imprved the lower tail are while keeping the upper tail are near 0.00135. 
+
+\subsubsection*{part b}
+<<q1_partb,echo=T>>=
+
+tpLimits <- function(p,n) { formatC(asin(sqrt(p)) + c(-1,1)*3/(2*sqrt(n)),digits=5)}
+
+tpLimits(0.016,250)
+
+tpLimits(0.1,400)
+                            
+@ 
+
+
+\section*{Question 2}
+Overdispersion is frequently a problem when an attributes control chart is used. Explain how you would test for overdispersion before constructing a p-chart.
+
+\subsection*{answer}
+
+
+ Compare the value of $n\bar{p}(1 -\bar{p}) $ to { \large$ \sum{ \frac{(X -\bar{X})^2}{n}} $}.
+  These calculations should be in within a order of magitude.
+
+\section*{Question 3}
+Assume that you wanted to construct a c-chart but you decided that you should transform the data. Which transformation should you use, or does it make any difference? Explain.
+
+\subsection*{notes}
+
+ See section 6.2.2
+ 
+ 
+ \subsection*{answer}
+ 
+  Any of the three following transformation will work and generally provide a non-zero LCL.  The controls are $\pm3$ of the mean of the transformed value. Each transform forces the varaiance to be 1.   
+\begin{itemize}
+\item  $y_0=2\sqrt{c} $ 
+\item $y_1=2\sqrt{c +\sfrac{3}{8}} $ 
+\item $y_2=\sqrt{c} +\sqrt{c+1} $ 
+\end{itemize}
+
+
+\section*{Question 4}
+What is the LCL for a 3-sigma Shewhart c-chart when c-bar = 6.45? If there is a problem with this value but you still want to plot the number of nonconformities and use this chart, what could you do to correct the problem?
+
+
+\subsection*{answer}
+  The issue with $\bar{c}$ of 6.45 is the LCL will not exist.  Using a transformation such as  $y_2=\sqrt{c} +\sqrt{c+1} $ creates a useful LCL.
+  
+
+\end{document}
