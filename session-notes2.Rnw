@@ -3,6 +3,8 @@
 \usepackage{booktabs}
 \usepackage{xfrac}
 %\usepackage{listings}
+%\usepackage[pdftex]{graphicx}
+%\DeclareGraphicsExtensions{.png,.pdf}
 
 % attempt to use fontspec to select fonts 
 \usepackage{fontspec,xltxtra,xunicode}
@@ -53,7 +55,7 @@ Now, consider a process that is stable and under statistical control. This curve
 You are presented with data that are obviously autocorrelated (perhaps similar to Figure 4.6). What is the first thing that you should try to do?
 
 \subsection*{answer}
-When presented with data that is autocorrelated, we should graph the raw data.  This provide information to see patterns and if subgroups can be constructed with fair sampling of the variance.
+When presented with data that is autocorrelated, we should graph the raw data.
 
 \section*{Question 3}
 You are presented with the data in Exercise \#6 on page 129, which you used in working Assignment One. Construct a normal probability plot of the subgroup averages. Does this explain why there are so many subgroup averages that fall outside the limits on the X-bar chart? If not, what is the explanation, or is there an explanation? What lesson is learned here, if any?
@@ -79,14 +81,25 @@ print(q3plottikz)
 dev.off()
 system("/usr/texbin/pdflatex -output-directory tik tik/session3_q3.tex")
 @ 
+
+\subsection*{answer}
+
+\includegraphics{tik/session3_q3.pdf}
+
+As we can see from the qq plot above the normality assumption is violated for this dataset. The values below the mean are higher than predicted and the values above the mean are lower in quantile than predicted. We should check normality assumptions before attempting to establish a monitoring regime.
+
 \section*{Question 4}
 
 Assume that a company has some chemical data that are naturally autocorrelated, as explained on page 143 for the data in Table 5.3. What estimator should be used to estimate the standard deviation for such data?
 
 \subsection*{answer}
- \large$\sfrac{s}{c_{4}} $ 
 
-  subgrouping can obscure important trends in trended data sets.
+ I am looking for an estimator that can be used without subgrouping.
+ This consideration eliminates $\bar{R}$ and $\bar{X}$ estimators from
+ sections 4.7.2 and 4.7.6 respectively.  Of the two choices for X - chart estimators covered in the course, I would choose
+ \large$\sfrac{s}{c_{4}} $ as a standard deviation estimator. 
+
+
 
 \section*{Question 5}
 
