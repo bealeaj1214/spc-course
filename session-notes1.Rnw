@@ -62,6 +62,7 @@ LCL \& UCL  - horizontal lines
 library("ggplot2")
 library("tikzDevice")
 options( tikzMetricsDictionary = NULL )
+options( tikzLatex = "/usr/texbin/xelatex" )
 @ 
 
 <<q1_setup,echo=false>>=
