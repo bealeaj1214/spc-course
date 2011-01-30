@@ -17,7 +17,7 @@
 \sffamily 
 \maketitle
 
-\SweaveOpts{prefix.string=tex/sessionNotes1}
+\SweaveOpts{prefix.string=tex/sessionNotes2}
 
 \section*{Question 1}
 Regarding subgroup size, explain to a person who has taken a statistics course and believes it is important to always obtain large samples why it would be inadvisable to use a subgroup size of at least 30 for an X-bar chart.
@@ -38,6 +38,8 @@ Now, consider a process that is stable and under statistical control. This curve
 
 
 \large$ n= \sfrac{(Z_{\sfrac{a}{2}}+Z_{\beta})^2\sigma^2} {D^2} $
+
+\subsection*{draft answer}
 
 \section*{Question 2}
 
