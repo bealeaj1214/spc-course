@@ -1,6 +1,7 @@
 *.pdf
 /generated
 /tex
+/tik
 *~
 session-notes1.tex
 assignment1.tex
