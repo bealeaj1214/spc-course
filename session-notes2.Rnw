@@ -48,7 +48,9 @@ Now, consider a process that is stable and under statistical control. This curve
 
 \large$ n= \sfrac{(Z_{\sfrac{a}{2}}+Z_{\beta})^2\sigma^2} {D^2} $
 
-\subsection*{draft answer}
+\subsection*{answer}
+In section 4.15 of the text in mentions that subgroups size is often a matter of convenience and economics. As with any screening technique, the cost of evaluating false positive can significant economic concern. Increasing the subgroup size to 30 for an $\bar{X} $ chart increase initial collection time and time to detect a mean shift.  Using a subgroup size of 30 also increase the change of a false positive reading.  The sigma estimate if more than 4 time smaller for subgroup size of 30 compared to a subgroup size of 5.
+
 
 \section*{Question 2}
 
