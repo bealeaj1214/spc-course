@@ -29,3 +29,17 @@ tik ::
 %.tex :: %.Rnw tex tik
 	R CMD Sweave $<
 
+
+tik/%.pdf :: tik/%.tex
+	cd tik ; echo pdflatex $<
+
+TIK_TEX_FILES := $(shell ls tik/*.tex)
+
+
+TIK_PDF_FILES :=$(TIK_TEX_FILES:%.tex=%.pdf)
+
+
+debug::
+	echo $(TIK_PDF_FILES)
+
+
