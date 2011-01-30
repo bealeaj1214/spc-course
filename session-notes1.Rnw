@@ -60,6 +60,8 @@ LCL \& UCL  - horizontal lines
 \section*{Question 1}
 <<setup,echo=false>>=
 library("ggplot2")
+library("tikzDevice")
+options( tikzMetricsDictionary = NULL )
 @ 
 
 <<q1_setup,echo=false>>=
@@ -123,14 +125,21 @@ hcl
 
 
 <<q1_rbar_plot,fig=T,eps=F,echo=F>>=
-plot=ggplot(q1) +geom_point(aes_string(x="number",y="R")) + 
+q1plot=ggplot(q1) +geom_point(aes_string(x="number",y="R")) + 
   geom_hline(aes(yintercept=0))+ geom_hline(aes(yintercept=8.143))+
   geom_hline(aes(yintercept=3.85))+ ylab("Range")+xlab("Subgroup number")+
-  theme_bw()+opts(title="R bar chart")+ylim(0,9) 
+  theme_bw()+ylim(0,9) 
+
+plot =q1plot+opts(title="R bar chart")
 print(plot)
 @ 
 
-
+<<q1_rbar_tik,echo=F>>=
+q1tik = q1plot+opts(title="\\(\\bar{R}\\)  chart")
+tikz(file="tik/q1_rbar_plot1.tex",standAlone=TRUE)
+print(q1tik)
+dev.off()
+@ 
 
 <<q1_xbarbar_plot,fig=T,eps=F,echo=F>>=
   hline.data <- data.frame(z=c(17.63,22.07,19.95),hue=c("blue","blue","red"))
@@ -138,10 +147,17 @@ plot=ggplot(q1) +geom_point(aes_string(x="number",y="xBar")) +
   ylab("Subgroup average")+xlab("Subgroup number")+
   geom_hline(aes(yintercept=z,colour=hue),hline.data)+ 
   scale_colour_identity() +
-  theme_bw()+opts(title="X double bar chart") +ylim(5,30)
-print(plot)
-@ 
+  theme_bw() +ylim(5,30)
+plot2 =plot+opts(title="X double bar chart")
 
+print(plot2)
+@ 
+<<q1_xbarxbar_tiks,echo=F>>=
+plotTikz = plot+opts(title="\\(\\bar{\\bar{X}}  chart\\)")
+tikz(file="tik/q1_xbarbar_plot3.tex",standAlone=TRUE)
+print(plotTikz)
+dev.off()
+@ 
 
 \section*{Question 2}
 
