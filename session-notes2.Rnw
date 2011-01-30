@@ -97,7 +97,7 @@ Assume that a company has some chemical data that are naturally autocorrelated, 
  I am looking for an estimator that can be used without subgrouping.
  This consideration eliminates $\bar{R}$ and $\bar{X}$ estimators from
  sections 4.7.2 and 4.7.6 respectively.  Of the two choices for X - chart estimators covered in the course, I would choose
- \large$\sfrac{s}{c_{4}} $ as a standard deviation estimator. 
+ {\large$\sfrac{s}{c_{4}} $} as a standard deviation estimator. 
 
 
 
@@ -106,4 +106,7 @@ Assume that a company has some chemical data that are naturally autocorrelated, 
 
 Assume that a time sequence plot of individual observations suggests that the mean was not constant throughout the data. What estimator should be used to estimate the standard deviation and construct initial control limits? Explain why.
 
+
+\subsection*{answer}
+I would choose { \large$\sfrac{s}{c_{4}} $} as a standard deviation estimator.  This esimator uses all known data in the Stage I phase. 
 \end{document}
