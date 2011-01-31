@@ -1,0 +1,14 @@
+
+* Lessons Learnt
+** Advance R/GGplot plots
+*** tikz device
+*** system call to run pdflatex on tikz tex file
+*** use of colour and data with geom\_hline
+*** use of scale\_colour\_identity
+*** use of specific data within ggplot geom
+** Latex/Graphic integration
+*** embedding graphics similar to Sweave 
+*** reference with tables and graphics
+** Latex/Math
+*** use of  \textbackslash sfrac command with xfrac package
+
