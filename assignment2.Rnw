@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+%\usepackage{listings}
+\usepackage{xfrac}
+
+% attempt to use fontspec to select fonts 
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\title{SPC: Assigment 2}
+\author{Alan Beale}
+\date{January 30, 2011}
+\begin{document}
+
+\sffamily 
+\maketitle
+
+\SweaveOpts{prefix.string=tex/assignment2}
+
+<<setup_assignment,echo=F>>=
+library("ggplot2")
+@ 
+
+\section*{Question 1}
+Regarding subgroup size, explain to a person who has taken a statistics course and believes it is important to always obtain large samples why it would be inadvisable to use a subgroup size of at least 30 for an X-bar chart.
+
+\subsection*{answer}
+In section 4.15 of the text in mentions that subgroups size is often a matter of convenience and economics. As with any screening technique, the cost of evaluating false positive can significant economic concern. Increasing the subgroup size to 30 for an $\bar{X} $ chart increase initial collection time and time to detect a mean shift.  Using a subgroup size of 30 also increase the change of a false positive reading.  The sigma estimate if more than 4 time smaller for subgroup size of 30 compared to a subgroup size of 5.
+
+
+\section*{Question 2}
+
+You are presented with data that are obviously autocorrelated (perhaps similar to Figure 4.6). What is the first thing that you should try to do?
+
+\subsection*{answer}
+When presented with data that is autocorrelated, we should graph the raw data.
+
+
+\section*{Question 3}
+You are presented with the data in Exercise \#6 on page 129, which you used in working Assignment One. Construct a normal probability plot of the subgroup averages. Does this explain why there are so many subgroup averages that fall outside the limits on the X-bar chart? If not, what is the explanation, or is there an explanation? What lesson is learned here, if any?
+
+\subsection*{answer}
+
+\includegraphics{tik/session3_q3.pdf}
+
+As we can see from the qq plot above the normality assumption is violated for this data set. The values below the mean are higher than predicted and the values above the mean are lower in quantile than predicted. We should check normality assumptions before attempting to establish a monitoring regime.
+
+\section*{Question 4}
+
+Assume that a company has some chemical data that are naturally autocorrelated, as explained on page 143 for the data in Table 5.3. What estimator should be used to estimate the standard deviation for such data?
+
+\subsection*{answer}
+
+ I am looking for an estimator that can be used without subgrouping.
+ This consideration eliminates $\bar{R}$ and $\bar{X}$ estimators from
+ sections 4.7.2 and 4.7.6 respectively.  Of the two choices for X - chart estimators covered in the course, I would choose
+ {\large$\sfrac{s}{c_{4}} $} as a standard deviation estimator. 
+
+
+
+\section*{Question 5}
+
+
+Assume that a time sequence plot of individual observations suggests that the mean was not constant throughout the data. What estimator should be used to estimate the standard deviation and construct initial control limits? Explain why.
+
+
+\subsection*{answer}
+I would choose { \large$\sfrac{s}{c_{4}} $} as a standard deviation estimator.  This estimator uses all known data in the Stage I phase. 
+
+\end{document}
