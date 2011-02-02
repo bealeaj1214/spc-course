@@ -67,7 +67,8 @@ q3 <-read.csv("data/Assigment1Q1.csv")
 
 @ 
 <<q3_scratch_plot,echo=F,fig=T,eps=F>>=
-q3plot=ggplot(q3) +stat_qq(aes_string(sample="xBar"))+theme_bw()+ylim(10,30)
+q3plot=ggplot(q3) +stat_qq(aes_string(sample="xBar"))+theme_bw()+ylim(10,30) +
+  geom_abline(intercept=19.85,colour="red",slope=5)
 plot=q3plot+opts(title="x bar plot") + ylab("xBar Sample")
 print(plot)
 @ 
