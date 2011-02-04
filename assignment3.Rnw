@@ -63,8 +63,9 @@ Over-dispersion is frequently a problem when an attributes control chart is used
 \subsection*{answer}
 
 
- Compare the value of $n\bar{p}(1 -\bar{p}) $ to { \large$ \sum{ \frac{(X -\bar{X})^2}{n}} $}.
-  These calculations should be in within a order of magnitude.
+ Compare the value of $n\bar{p}(1 -\bar{p}) $ to { \large$ \sum{
+     \frac{(X -\bar{X})^2}{n}} $}.  These calculations should be
+ within an order of magnitude.
 
 \section*{Question 3}
 Assume that you wanted to construct a c-chart but you decided that you should transform the data. Which transformation should you use, or does it make any difference? Explain.
@@ -84,7 +85,7 @@ What is the LCL for a 3-sigma Shewhart c-chart when c-bar = 6.45? If there is a 
 
 
 \subsection*{answer}
-  The issue with $\bar{c}$ of 6.45 is the LCL will not exist. From our reading we know that if $\bar{c} < 9 $ then LCL will not exist because the LCL cannot leass than zero.  Using a transformation such as  $y_2=\sqrt{c} +\sqrt{c+1} $ creates a useful LCL.
+  The issue with $\bar{c}$ of 6.45 is the LCL will not exist. From our reading we know that if $\bar{c} < 9 $ then LCL will not exist because the LCL cannot be less than zero.  Using a transformation such as  $y_2=\sqrt{c} +\sqrt{c+1} $ creates a useful LCL.
   
 
 
