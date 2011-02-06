@@ -1,5 +1,6 @@
 #+TITLE: Statisitical Process Control : session #4 notes
 #+AUTHOR: Alan Beale
+#+OPTIONS: toc:nil
 #+LATEX_HEADER:  \usepackage{xfrac} 
 #+STARTUP: hideblocks
 #+BABEL: :session *R* :results silent
@@ -20,11 +21,15 @@
 
  LCL = 2.9529 +1.01956\lamba - 3.2729\sqrt{\lambda}\\
 
-
 \lambda is the mean of the Poission distribution
 
 
 ** Work
+
+#+begin_src R :exports both
+ 2+2
+#+end_src
+
 
 ** Answer
 
@@ -37,7 +42,20 @@
 
 ** Notes
 
+Well, we can now include =R= in our document.  Here's a simple example
+
+#+begin_src R :exports both
+  2 + 2
+
+  5 * 8
+#+end_src
+
 ** Work
+#+srcname: basic-R
+#+begin_src R :results silent
+b <- 9
+b + 4
+#+end_src
 
 ** Answer
 

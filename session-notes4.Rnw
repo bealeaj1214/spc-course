@@ -1,0 +1,107 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xfrac}
+%\usepackage{listings}
+
+% attempt to use fontspec to select fonts 
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+
+\title{Statistical Process Control : Session \# 4 }
+\author{Alan Beale}
+\date{February 05, 2011}
+\begin{document}
+
+\sffamily 
+\maketitle
+
+\SweaveOpts{prefix.string=tex/sessionNotes4}
+
+\section{Question 1}
+Compute the regression-based control limits for a c-chart for the
+  data in Exercise \#4 on page 183 and compare those with the 3-sigma
+  c-chart limits. Comment.
+\subsection{Notes}
+ p174 -175
+
+
+ $ UCL = 0.6195 +1.0052\lambda + 2.983\sqrt{\lambda} $
+
+
+ $ LCL = 2.9529 +1.01956\lambda - 3.2729\sqrt{\lambda}$ 
+
+$\lambda$ is the mean of the Poission distribution
+
+\subsection{Work}
+<<q1_notes>>=
+q1.data <-  c(
+  6,7,3,5,2,2,
+  3,8,4,6,4,9,
+  4,5,5,8,4,2,
+  3,3,8,3,10,5,
+  8,4,7,2,6,6)
+
+mean(q1.data)
+
+c(NA, mean(q1.data) + 3*sqrt(mean(q1.data)))
+
+@ 
+
+<<q1_regression_limits>>=
+ c_regression_limits <-function(cbar) {  c(2.9529 +1.01956*cbar - 3.2729*sqrt(cbar),
+                                           0.6195 +1.0052*cbar + 2.983*sqrt(cbar)) }
+
+c_regression_limits(mean(q1.data))
+
+@ 
+\subsection{Answer}
+
+
+\section{Question 2}
+
+Compute the regression-based limits for an np chart using the data in
+Table 6.1, using p-bar in place of p. Compare these limits with the
+limits shown in Figure 6.2.
+ 
+\subsection{Notes}
+\subsection{Work}
+\subsection{Answer}
+
+
+\section{Question 3}
+
+Compute the regression-based control limits for a u-chart for the data
+in Exercise \#6 on page 184 and compare those with the 3-sigma u-chart
+limits. Comment.
+
+\subsection{Notes}
+\subsection{Work}
+\subsection{Answer}
+
+
+\section{Question 4}
+Given what was learned about the data in Exercise \#6 on page 129 in
+Assignment 3, would you compute probability limits for an R-chart for
+those data? Why, or why not? If those control limits were computed,
+what would be the LCL and UCL?
+
+\subsection{Notes}
+\subsection{Work}
+\subsection{Answer}
+
+
+
+\section{Question 5}
+
+Which would be preferred, an R-chart with probability limits or an
+s-chart with probability limits, or does it make any difference?
+Explain.
+
+\subsection{Notes}
+\subsection{Work}
+\subsection{Answer}
+
+
+\end{document}
