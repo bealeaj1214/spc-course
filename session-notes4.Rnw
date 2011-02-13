@@ -19,6 +19,12 @@
 
 \SweaveOpts{prefix.string=tex/sessionNotes4}
 
+<<setup,echo=F>>=
+library("ggplot2")
+library("tikzDevice")
+options( tikzMetricsDictionary = NULL )
+options( tikzLatex = "/usr/texbin/xelatex" )
+@ 
 \section{Question 1}
 Compute the regression-based control limits for a c-chart for the
   data in Exercise \#4 on page 183 and compare those with the 3-sigma
@@ -46,16 +52,33 @@ q1.data <-  c(
 mean(q1.data)
 
 c(NA, mean(q1.data) + 3*sqrt(mean(q1.data)))
-
+q1.trad.ucl =mean(q1.data) + 3*sqrt(mean(q1.data))
 @ 
+
 
 <<q1_regression_limits>>=
  c_regression_limits <-function(cbar) {  c(2.9529 +1.01956*cbar - 3.2729*sqrt(cbar),
                                            0.6195 +1.0052*cbar + 2.983*sqrt(cbar)) }
 
 c_regression_limits(mean(q1.data))
-
 @ 
+
+<<plot_setup,echo=F>>=
+q1.frame<-data.frame(counts=q1.data)
+q1.frame$obs =(1:length(q1.data))
+ hline.data <- data.frame(z=c(c_regression_limits(mean(q1.data)),q1.trad.ucl),hue=c("darkblue","darkblue","blue"),ltype=c("dotted","dashed","dashed"),type=factor(c("regression","regression","tradtional")))
+q1.base.plot =ggplot(hline.data) + geom_point(aes_string(x="obs",y="counts"),data=q1.frame) +
+  geom_hline(aes(yintercept=z,colour=hue,linetype=ltype))+ 
+  scale_colour_identity() + scale_linetype_identity() +
+  geom_hline(aes(yintercept=mean(q1.data),colour=c("red"),linetype=c("solid")))+ 
+  facet_wrap(~ type,nrow=1) +
+  theme_bw()
+@ 
+
+<<plot_test,fig=T,eps=F,echo=F>>=
+print(q1.base.plot)
+@ 
+
 \subsection{Answer}
 
 
@@ -117,6 +140,15 @@ limits. Comment.
 
 \subsection{Notes}
 
+\paragraph{}
+p 176
+
+$\bar{u} = \sfrac{\sum{c_{i}}}{\sum{n_{i}}} $
+
+$ \bar{u} \pm 3\sqrt{\frac{\bar{u}}{n_{i}}}$    Eq (6.11)
+
+
+\paragraph{}
 p 177
 
 $UCL =\bar{u} +k_{1}\sqrt{\sfrac{\bar{u}}{n_{i}}}$
