@@ -41,7 +41,7 @@ Compute the regression-based control limits for a c-chart for the
 
  $ LCL = 2.9529 +1.01956\lambda - 3.2729\sqrt{\lambda}$ 
 
-$\lambda$ is the mean of the Poission distribution
+$\lambda$ is the mean of the Poisson distribution
 
 \subsection{Work}
 <<q1_notes>>=
@@ -54,7 +54,7 @@ q1.data <-  c(
 
 mean(q1.data)
 
-c(NA, mean(q1.data) + 3*sqrt(mean(q1.data)))
+formatC(c(NA, mean(q1.data) + 3*sqrt(mean(q1.data))),digits=3,format="f")
 q1.trad.ucl =mean(q1.data) + 3*sqrt(mean(q1.data))
 @ 
 
@@ -63,14 +63,17 @@ q1.trad.ucl =mean(q1.data) + 3*sqrt(mean(q1.data))
  c_regression_limits <-function(cbar) {  c(2.9529 +1.01956*cbar - 3.2729*sqrt(cbar),
                                            0.6195 +1.0052*cbar + 2.983*sqrt(cbar)) }
 
-c_regression_limits(mean(q1.data))
+formatC(c_regression_limits(mean(q1.data)),digits=3,format="f") 
 @ 
 
 <<plot_setup,echo=F>>=
 q1.frame<-data.frame(counts=q1.data)
 q1.frame$obs =(1:length(q1.data))
- hline.data <- data.frame(z=c(c_regression_limits(mean(q1.data)),q1.trad.ucl),hue=c("darkblue","darkblue","blue"),ltype=c("dotted","dashed","dashed"),type=factor(c("regression","regression","tradtional")))
-q1.base.plot =ggplot(hline.data) + geom_point(aes_string(x="obs",y="counts"),data=q1.frame) +
+ hline.data <- data.frame(z=c(c_regression_limits(mean(q1.data)),q1.trad.ucl),hue=c("darkblue","darkblue","blue"),ltype=c("dotted","dashed","dashed"),type=factor(c("regression","regression","traditional")))
+
+q1.base.plot =ggplot(hline.data) + 
+  geom_point(aes_string(x="obs",y="counts"),data=q1.frame) +
+  geom_line( aes_string(x="obs",y="counts"),data=q1.frame) +
   geom_hline(aes(yintercept=z,colour="blue",linetype=ltype))+ 
   scale_colour_identity() + scale_linetype_identity() +
   geom_hline(aes(yintercept=mean(q1.data),colour=c("red"),linetype=c("solid")))+ 
@@ -81,7 +84,7 @@ q1.base.plot =ggplot(hline.data) + geom_point(aes_string(x="obs",y="counts"),dat
 <<plot_test,echo=F>>=
 tikz(file="tik/assign4_q1_c_chart.tex",standAlone=TRUE)
 print(q1.base.plot)
-dev.off()
+garbage <- dev.off()
 
 system("/usr/texbin/pdflatex -output-directory tik tik/assign4_q1_c_chart.tex")
 @ 
@@ -89,6 +92,20 @@ system("/usr/texbin/pdflatex -output-directory tik tik/assign4_q1_c_chart.tex")
 
 
 \subsection{Answer}
+
+ Using regression based limit calculates LCL exists and the UCL is slightly larger 12.427 as opposed to 11.819 with 3-sigma calculations.
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & NA & 11.819 \\
+ regression \newline limits & 0.752 & 12.427 \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(c\)-chart}
+\end{table*}
+
 
 
 \section{Question 2}
@@ -139,6 +156,12 @@ p_regression_limits(1000,0.0106)
 
 @ 
 
+
+\subsection{Answer}
+
+ The LCL with regression calculate is  \( \sim 3\) instead  of \(\sim \sfrac{9}{10} \). The regression LCL is much larger.  The UCL values are nearly the same but the regression-based value is larger.
+
+ 
 \begin{table*}[h!]
   \ra{1.3}
 \begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
@@ -150,10 +173,7 @@ method & LCL & UCL \\ \midrule
 \caption{Control Limits for \(np\)-chart}
 \end{table*}
 
-
-\subsection{Answer}
-
-
+ 
 \section{Question 3}
 
 Compute the regression-based control limits for a u-chart for the data
@@ -214,6 +234,9 @@ k2(6.32)
 
 @ 
 
+
+\subsection{Answer}
+
 \begin{table*}[h!]
   \ra{1.3}
 \begin{tabular}{@{}p{1.5cm}ll@{}} \toprule
@@ -224,7 +247,6 @@ method & LCL & UCL \\ \midrule
 \end{tabular}
 \caption{Control Limits for \(u\)-chart}
 \end{table*}
-\subsection{Answer}
 
 
 \section{Question 4}
@@ -255,6 +277,8 @@ $UCL = D_{.999}(\sfrac{\bar{R}}{d_{2}}) $
 \caption{Select Control Limit Parameters when n=5}
 \end{table*}
 
+\subsection{Work}
+
 
 <<q4_Rbar>>=
 3.85/2.326
@@ -265,6 +289,12 @@ Rbar.adjusted* c(0.367 ,5.484)
 formatC(Rbar.adjusted* c(0.367 ,5.484), digits=3,format="f")
 
 @ 
+
+
+
+\subsection{Answer}
+
+In an earlier assignment we learned that normality assumption is violated for this data-set.  Given this issue with normality assumption, I would hesitate to use an R-chart.
 
 
 
@@ -279,8 +309,7 @@ method & LCL & UCL \\ \midrule
 \caption{Control limits \(\bar{R}\)-chart for Exercise \# 6}
 \end{table*}
 
-\subsection{Work}
-\subsection{Answer}
+
 
 
 
@@ -293,10 +322,8 @@ Explain.
 \subsection{Notes}
 see p. 89 - 4.7.3 s chart
 
-
-s -chart are preferred over R- charts if the computations are automated
-\subsection{Work}
 \subsection{Answer}
+s -chart are preferred over R- charts if the computations are automated. The significant choice is to use a R-chart or  a s-chart .  Use of probability limits only refines control limits.
 
 
 \end{document}
