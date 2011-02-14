@@ -1,0 +1,100 @@
+#+TITLE: Statisitical Process Control : session #4 notes
+#+AUTHOR: Alan Beale
+#+OPTIONS: toc:nil
+#+LATEX_HEADER:  \usepackage{xfrac} 
+#+STARTUP: hideblocks
+#+BABEL: :session *R* :results silent
+
+* Question 1
+
+  Compute the regression-based control limits for a c-chart for the
+  data in Exercise #4 on page 183 and compare those with the 3-sigma
+  c-chart limits. Comment.
+
+** Notes
+
+  p174 -175
+
+
+ UCL = 0.6195 +1.0052\lambda + 2.983\sqrt{\lambda} \\
+
+
+ LCL = 2.9529 +1.01956\lamba - 3.2729\sqrt{\lambda}\\
+
+\lambda is the mean of the Poission distribution
+
+
+** Work
+
+#+begin_src R :exports both
+ 2+2
+#+end_src
+
+
+** Answer
+
+
+* Question 2
+
+ Compute the regression-based limits for an np chart using the data in
+ Table 6.1, using p-bar in place of p. Compare these limits with the
+ limits shown in Figure 6.2.
+
+** Notes
+
+Well, we can now include =R= in our document.  Here's a simple example
+
+#+begin_src R :exports both
+  2 + 2
+
+  5 * 8
+#+end_src
+
+** Work
+#+srcname: basic-R
+#+begin_src R :results silent
+b <- 9
+b + 4
+#+end_src
+
+** Answer
+
+
+* Question 3
+
+Compute the regression-based control limits for a u-chart for the data
+ in Exercise #6 on page 184 and compare those with the 3-sigma u-chart
+ limits. Comment.
+
+** Notes
+
+** Work
+
+** Answer
+
+
+* Question 4
+
+Given what was learned about the data in Exercise #6 on page 129 in
+Assignment 3, would you compute probability limits for an R-chart for
+those data? Why, or why not? If those control limits were computed,
+what would be the LCL and UCL?
+
+** Notes
+
+** Work
+
+** Answer
+
+
+* Question 5
+
+Which would be preferred, an R-chart with probability limits or an
+s-chart with probability limits, or does it make any difference?
+Explain.
+
+** Notes
+
+** Work
+
+** Answer

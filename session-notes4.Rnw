@@ -1,0 +1,394 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xfrac}
+%\usepackage{listings}
+
+% attempt to use fontspec to select fonts 
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+
+% adjustment for tables
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\title{Statistical Process Control : Session \# 4 }
+\author{Alan Beale}
+\date{February 05, 2011}
+\begin{document}
+
+\sffamily 
+\maketitle
+
+\SweaveOpts{prefix.string=tex/sessionNotes4}
+
+<<setup,echo=F>>=
+library("ggplot2")
+library("tikzDevice")
+options( tikzMetricsDictionary = NULL )
+options( tikzLatex = "/usr/texbin/xelatex" )
+
+vplayout <- function(x,y) { viewport(layout.pos.row=x,layout.pos.col=y) }
+@ 
+\section{Question 1}
+Compute the regression-based control limits for a c-chart for the
+  data in Exercise \#4 on page 183 and compare those with the 3-sigma
+  c-chart limits. Comment.
+\subsection{Notes}
+ p174 -175
+
+
+ $ UCL = 0.6195 +1.0052\lambda + 2.983\sqrt{\lambda} $
+
+
+ $ LCL = 2.9529 +1.01956\lambda - 3.2729\sqrt{\lambda}$ 
+
+$\lambda$ is the mean of the Poisson distribution
+
+\subsection{Work}
+<<q1_notes>>=
+q1.data <-  c(
+  6,7,3,5,2,2,
+  3,8,4,6,4,9,
+  4,5,5,8,4,2,
+  3,3,8,3,10,5,
+  8,4,7,2,6,6)
+
+mean(q1.data)
+
+formatC(c(NA, mean(q1.data) + 3*sqrt(mean(q1.data))),digits=3,format="f")
+q1.trad.ucl =mean(q1.data) + 3*sqrt(mean(q1.data))
+@ 
+
+
+<<q1_regression_limits>>=
+ c_regression_limits <-function(cbar) {  c(2.9529 +1.01956*cbar - 3.2729*sqrt(cbar),
+                                           0.6195 +1.0052*cbar + 2.983*sqrt(cbar)) }
+
+formatC(c_regression_limits(mean(q1.data)),digits=3,format="f") 
+@ 
+
+<<plot_setup,echo=F>>=
+q1.frame<-data.frame(counts=q1.data)
+q1.frame$obs =(1:length(q1.data))
+ hline.data <- data.frame(z=c(c_regression_limits(mean(q1.data)),q1.trad.ucl),hue=c("darkblue","darkblue","blue"),ltype=c("dotted","dashed","dashed"),type=factor(c("regression","regression","traditional")))
+
+q1.base.plot =ggplot(hline.data) + 
+  geom_point(aes_string(x="obs",y="counts"),data=q1.frame) +
+  geom_line( aes_string(x="obs",y="counts"),data=q1.frame) +
+  geom_hline(aes(yintercept=z,colour="blue",linetype=ltype))+ 
+  scale_colour_identity() + scale_linetype_identity() +
+  geom_hline(aes(yintercept=mean(q1.data),colour=c("red"),linetype=c("solid")))+ 
+  facet_wrap(~ type,nrow=1) + xlab("Sample number") +ylab("Sample count")+
+  theme_bw()+opts(legend.position = "none", title="\\(c\\) - chart\n") 
+@ 
+
+<<plot_test,echo=F>>=
+tikz(file="tik/assign4_q1_c_chart.tex",standAlone=TRUE)
+print(q1.base.plot)
+garbage <- dev.off()
+
+system("/usr/texbin/pdflatex -output-directory tik tik/assign4_q1_c_chart.tex")
+@ 
+\includegraphics{tik/assign4_q1_c_chart.pdf}
+
+
+\subsection{Answer}
+
+ Using regression based limit calculates LCL exists and the UCL is slightly larger 12.427 as opposed to 11.819 with 3-sigma calculations.
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & NA & 11.819 \\
+ regression \newline limits & 0.752 & 12.427 \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(c\)-chart}
+\end{table*}
+
+
+
+\section{Question 2}
+
+Compute the regression-based limits for an np chart using the data in
+Table 6.1, using p-bar in place of p. Compare these limits with the
+limits shown in Figure 6.2.
+ 
+\subsection{Notes}
+
+p164
+
+
+
+$UCL = 0.6195 +1.00523np+2.983\sqrt{np}$
+
+$LCL = 2.9529 +1.0195np -3.2729\sqrt{np}$
+
+
+
+$\bar{p}=.0106$
+
+
+$ n= 1000 $
+
+\subsection{Work}
+
+<<q2_work>>=
+np_traditional_limits <-function(n,p) {formatC(n*p +c(-1,1)*3*sqrt(n*p*(1-p)),digits=3,format="f") }
+
+np_regression_limits<-function(n,p){formatC(c(2.9529 +1.0195*n*p -3.2729*sqrt(n*p),
+                                    0.6195 +1.00523*n*p+2.983*sqrt(n*p)),digits=3,format="f")}
+
+
+np_traditional_limits(1000,0.0106)
+
+np_regression_limits(1000,0.0106)
+
+
+p_traditional_limits <-function(n,p) {formatC((n*p +c(-1,1)*3*sqrt(n*p*(1-p)))/n,digits=5) }
+
+p_regression_limits<-function(n,p){formatC(c(2.9529 +1.0195*n*p -3.2729*sqrt(n*p),
+                                    0.6195 +1.00523*n*p+2.983*sqrt(n*p))/n,digits=5)}
+
+p_traditional_limits(1000,0.0106)
+
+p_regression_limits(1000,0.0106)
+
+@ 
+
+
+\subsection{Answer}
+
+ The LCL with regression calculate is  \( \sim 3\) instead  of \(\sim \sfrac{9}{10} \). The regression LCL is much larger.  The UCL values are nearly the same but the regression-based value is larger.
+
+ 
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & 0.885 & 20.315 \\
+ regression \newline limits & 3.014 & 20.987 \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(np\)-chart}
+\end{table*}
+
+ 
+\section{Question 3}
+
+Compute the regression-based control limits for a u-chart for the data
+in Exercise \#6 on page 184 and compare those with the 3-sigma u-chart
+limits. Comment.
+
+\subsection{Notes}
+
+\paragraph{}
+p 176
+
+$\bar{u} = \sfrac{\sum{c_{i}}}{\sum{n_{i}}} $
+
+$ \bar{u} \pm 3\sqrt{\frac{\bar{u}}{n_{i}}}$    Eq (6.11)
+
+
+\paragraph{}
+p 177
+
+$UCL =\bar{u} +k_{1}\sqrt{\sfrac{\bar{u}}{n_{i}}}$
+
+$LCL =\bar{u} -k_{2}\sqrt{\sfrac{\bar{u}}{n_{i}}}$
+
+
+$ \bar{c} +k_{1}\sqrt{\bar{c}} = 0.6195 +1.0052\lambda + 2.983\sqrt{\lambda} $
+
+
+$ k_{1}\sqrt{\bar{c}} = (0.6195 +1.0052\bar{c} + 2.983\sqrt{\bar{c}}) - \bar{c} $
+
+
+$ k_{1} = \sfrac{(0.6195 +1.0052\bar{c} + 2.983\sqrt{\bar{c}}) - \bar{c}}{\sqrt{\bar{c}}} $
+
+$ k_{1} = \sfrac{(0.6195 +0.0052\bar{c} + 2.983\sqrt{\bar{c}}) }{\sqrt{\bar{c}}} $
+
+
+
+
+ $ \bar{c} -k_{2}\sqrt{\bar{c}}= 2.9529 +1.01956\lambda - 3.2729\sqrt{\lambda}$ 
+
+$ k_{2}\sqrt{\bar{c}}= \bar{c} -(2.9529 +1.01956\bar{c} - 3.2729\sqrt{\bar{c}})$ 
+
+
+$ k_{2}= \sfrac{\bar{c} -(2.9529 +1.01956\bar{c} - 3.2729\sqrt{\bar{c}})}{\sqrt{\bar{c}}} $
+
+$ k_{2}= \sfrac{ -(2.9529 +0.01956\bar{c} - 3.2729\sqrt{\bar{c}})}{\sqrt{\bar{c}}} $
+
+\subsection{Work}
+
+<<q3_work>>=
+k1 <- function(cbar)  {(0.6195 +0.0052*cbar + 2.983*sqrt(cbar))/sqrt(cbar)}
+
+k2 <- function(cbar)  {-(2.9529 +0.01956*cbar - 3.2729*sqrt(cbar))/sqrt(cbar)}
+
+
+k1(6.32)
+
+k2(6.32)
+
+@ 
+
+<<q3_work_data>>=
+ q3.data <- read.csv("data/assignment4q3.csv")
+ q3.data$u <- q3.data$c/q3.data$n
+ q3.data$obs <- (1: length(q3.data$c))
+                
+#str(q3.data)
+
+sum(q3.data$c) /sum(q3.data$n)
+ubar <- sum(q3.data$c) /sum(q3.data$n)
+
+q3.data$rlcl <- ubar - 2.05*sqrt(ubar/q3.data$n)
+
+q3.data$rucl <- ubar + 3.24*sqrt(ubar/q3.data$n)
+
+q3.data$slcl <- ubar - 3*sqrt(ubar/q3.data$n)
+
+q3.data$sucl <- ubar + 3*sqrt(ubar/q3.data$n)
+
+q3.data$slcl <- ifelse(q3.data$slcl>0, q3.data$slcl ,NA)
+
+q3.data$xstart <- q3.data$obs -0.5
+q3.data$xend <- q3.data$obs + 0.5
+
+#str(q3.data)
+
+@ 
+
+
+<<q3_plot_setup,echo=F>>=
+q3.base.plot =ggplot(q3.data) + 
+  geom_point(aes_string(x="obs",y="u")) + geom_line(aes_string(x="obs",y="u"))+
+  geom_hline(aes(yintercept=ubar,colour=c("red"),linetype=c("solid")))+ 
+  scale_colour_identity() + scale_linetype_identity() +
+  theme_bw()+opts(legend.position = "none") +ylim(0,.2)
+
+q3.rplot = q3.base.plot +
+  geom_segment(aes(x=xstart,xend=xend,y=rucl,yend=rucl,colour=c("blue"),linetype=c("dashed"))) +
+  geom_segment(aes(x=xstart,xend=xend,y=rlcl,yend=rlcl,colour=c("blue"),linetype=c("dashed"))) +
+  opts( title="regression \\(u\\) - chart\n")
+
+q3.splot = q3.base.plot +
+  geom_segment(aes(x=xstart,xend=xend,y=sucl,yend=sucl,colour=c("blue"),linetype=c("dashed"))) +
+  geom_segment(aes(x=xstart,xend=xend,y=slcl,yend=slcl,colour=c("blue"),linetype=c("dashed"))) +
+  opts( title="sigma \\(u\\) - chart\n")
+@ 
+
+<<q3_plot_test,echo=F>>=
+tikz(file="tik/assign4_q3_u_chart.tex",standAlone=TRUE)
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,2)))
+print(q3.rplot,vp=vplayout(1,1))
+print(q3.splot,vp=vplayout(1,2))
+garbage <- dev.off()
+
+system("/usr/texbin/pdflatex -output-directory tik tik/assign4_q3_u_chart.tex")
+
+@ 
+
+\includegraphics{tik/assign4_q3_u_chart}
+
+\subsection{Answer}
+
+The regression limits create tighter limits than the 3 sigma technique. The UCL is consistently slightly larger and the LCL is consistently much larger.
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}ll@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & \( \bar{u} - 3\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+ regression \newline limits & \( \bar{u} - k_{2}\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + k_{1}\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+  calculated \newline regression \newline values & \( \bar{u} - 2.05\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3.24\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(u\)-chart}
+\end{table*}
+
+
+
+\section{Question 4}
+Given what was learned about the data in Exercise \#6 on page 129 in
+Assignment 3, would you compute probability limits for an R-chart for
+those data? Why, or why not? If those control limits were computed,
+what would be the LCL and UCL?
+
+\subsection{Notes}
+
+
+probability limits formula for R-chart
+
+\paragraph{}
+$LCL = D_{.001}(\sfrac{\bar{R}}{d_{2}}) $
+
+\paragraph{}
+$UCL = D_{.999}(\sfrac{\bar{R}}{d_{2}}) $
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{2cm}rrrrr@{}} \toprule
+ & \(D_{.001} \) & \(D_{.999}\) & \(D_{3}\) & \(D_{4} \) &\(d_{2} \) \\ \midrule
+ subgroup =5 & 0.367 & 5.484 & 0 & 2.2282 & 2.326 \\
+%% regression \newline limits & 3.014 & 20.987 \\
+  \bottomrule
+\end{tabular}
+\caption{Select Control Limit Parameters when n=5}
+\end{table*}
+
+\subsection{Work}
+
+
+<<q4_Rbar>>=
+3.85/2.326
+Rbar.adjusted= 3.85/2.326
+
+Rbar.adjusted* c(0.367 ,5.484)
+
+formatC(Rbar.adjusted* c(0.367 ,5.484), digits=3,format="f")
+
+@ 
+
+
+
+\subsection{Answer}
+
+In an earlier assignment we learned that normality assumption is violated for this data-set.  Given this issue with normality assumption, I would hesitate to use an R-chart.
+
+
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & NA & 8.143 \\
+ regression \newline limits & 0.607 & 9.077 \\
+  \bottomrule
+\end{tabular}
+\caption{Control limits \(\bar{R}\)-chart for Exercise \# 6}
+\end{table*}
+
+
+
+
+
+\section{Question 5}
+
+Which would be preferred, an R-chart with probability limits or an
+s-chart with probability limits, or does it make any difference?
+Explain.
+
+\subsection{Notes}
+see p. 89 - 4.7.3 s chart
+
+\subsection{Answer}
+s -chart are preferred over R- charts if the computations are automated. The significant choice is to use a R-chart or  a s-chart .  Use of probability limits only refines control limits.
+
+
+\end{document}
