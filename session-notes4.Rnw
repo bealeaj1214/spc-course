@@ -9,6 +9,9 @@
 \defaultfontfeatures{Mapping=tex-text}
 \setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
 
+% adjustment for tables
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
 \title{Statistical Process Control : Session \# 4 }
 \author{Alan Beale}
 \date{February 05, 2011}
@@ -68,16 +71,22 @@ q1.frame<-data.frame(counts=q1.data)
 q1.frame$obs =(1:length(q1.data))
  hline.data <- data.frame(z=c(c_regression_limits(mean(q1.data)),q1.trad.ucl),hue=c("darkblue","darkblue","blue"),ltype=c("dotted","dashed","dashed"),type=factor(c("regression","regression","tradtional")))
 q1.base.plot =ggplot(hline.data) + geom_point(aes_string(x="obs",y="counts"),data=q1.frame) +
-  geom_hline(aes(yintercept=z,colour=hue,linetype=ltype))+ 
+  geom_hline(aes(yintercept=z,colour="blue",linetype=ltype))+ 
   scale_colour_identity() + scale_linetype_identity() +
   geom_hline(aes(yintercept=mean(q1.data),colour=c("red"),linetype=c("solid")))+ 
-  facet_wrap(~ type,nrow=1) +
-  theme_bw()
+  facet_wrap(~ type,nrow=1) + xlab("Sample number") +ylab("Sample count")+
+  theme_bw()+opts(legend.position = "none", title="\\(c\\) - chart\n") 
 @ 
 
-<<plot_test,fig=T,eps=F,echo=F>>=
+<<plot_test,echo=F>>=
+tikz(file="tik/assign4_q1_c_chart.tex",standAlone=TRUE)
 print(q1.base.plot)
+dev.off()
+
+system("/usr/texbin/pdflatex -output-directory tik tik/assign4_q1_c_chart.tex")
 @ 
+\includegraphics{tik/assign4_q1_c_chart.pdf}
+
 
 \subsection{Answer}
 
@@ -129,6 +138,19 @@ p_traditional_limits(1000,0.0106)
 p_regression_limits(1000,0.0106)
 
 @ 
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & 0.885 & 20.315 \\
+ regression \newline limits & 3.014 & 20.987 \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(np\)-chart}
+\end{table*}
+
+
 \subsection{Answer}
 
 
@@ -191,6 +213,17 @@ k1(6.32)
 k2(6.32)
 
 @ 
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}ll@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & \( \bar{u} - 3\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+ regression \newline limits & \( \bar{u} - k_{2}\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + k_{1}\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(u\)-chart}
+\end{table*}
 \subsection{Answer}
 
 
@@ -201,6 +234,51 @@ those data? Why, or why not? If those control limits were computed,
 what would be the LCL and UCL?
 
 \subsection{Notes}
+
+
+probability limits formula for R-chart
+
+\paragraph{}
+$LCL = D_{.001}(\sfrac{\bar{R}}{d_{2}}) $
+
+\paragraph{}
+$UCL = D_{.999}(\sfrac{\bar{R}}{d_{2}}) $
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{2cm}rrrrr@{}} \toprule
+ & \(D_{.001} \) & \(D_{.999}\) & \(D_{3}\) & \(D_{4} \) &\(d_{2} \) \\ \midrule
+ subgroup =5 & 0.367 & 5.484 & 0 & 2.2282 & 2.326 \\
+%% regression \newline limits & 3.014 & 20.987 \\
+  \bottomrule
+\end{tabular}
+\caption{Select Control Limit Parameters when n=5}
+\end{table*}
+
+
+<<q4_Rbar>>=
+3.85/2.326
+Rbar.adjusted= 3.85/2.326
+
+Rbar.adjusted* c(0.367 ,5.484)
+
+formatC(Rbar.adjusted* c(0.367 ,5.484), digits=3,format="f")
+
+@ 
+
+
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}rr@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & NA & 8.143 \\
+ regression \newline limits & 0.607 & 9.077 \\
+  \bottomrule
+\end{tabular}
+\caption{Control limits \(\bar{R}\)-chart for Exercise \# 6}
+\end{table*}
+
 \subsection{Work}
 \subsection{Answer}
 
@@ -213,6 +291,10 @@ s-chart with probability limits, or does it make any difference?
 Explain.
 
 \subsection{Notes}
+see p. 89 - 4.7.3 s chart
+
+
+s -chart are preferred over R- charts if the computations are automated
 \subsection{Work}
 \subsection{Answer}
 
