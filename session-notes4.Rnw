@@ -27,6 +27,8 @@ library("ggplot2")
 library("tikzDevice")
 options( tikzMetricsDictionary = NULL )
 options( tikzLatex = "/usr/texbin/xelatex" )
+
+vplayout <- function(x,y) { viewport(layout.pos.row=x,layout.pos.col=y) }
 @ 
 \section{Question 1}
 Compute the regression-based control limits for a c-chart for the
@@ -234,8 +236,69 @@ k2(6.32)
 
 @ 
 
+<<q3_work_data>>=
+ q3.data <- read.csv("data/assignment4q3.csv")
+ q3.data$u <- q3.data$c/q3.data$n
+ q3.data$obs <- (1: length(q3.data$c))
+                
+#str(q3.data)
+
+sum(q3.data$c) /sum(q3.data$n)
+ubar <- sum(q3.data$c) /sum(q3.data$n)
+
+q3.data$rlcl <- ubar - 2.05*sqrt(ubar/q3.data$n)
+
+q3.data$rucl <- ubar + 3.24*sqrt(ubar/q3.data$n)
+
+q3.data$slcl <- ubar - 3*sqrt(ubar/q3.data$n)
+
+q3.data$sucl <- ubar + 3*sqrt(ubar/q3.data$n)
+
+q3.data$slcl <- ifelse(q3.data$slcl>0, q3.data$slcl ,NA)
+
+q3.data$xstart <- q3.data$obs -0.5
+q3.data$xend <- q3.data$obs + 0.5
+
+#str(q3.data)
+
+@ 
+
+
+<<q3_plot_setup,echo=F>>=
+q3.base.plot =ggplot(q3.data) + 
+  geom_point(aes_string(x="obs",y="u")) + geom_line(aes_string(x="obs",y="u"))+
+  geom_hline(aes(yintercept=ubar,colour=c("red"),linetype=c("solid")))+ 
+  scale_colour_identity() + scale_linetype_identity() +
+  theme_bw()+opts(legend.position = "none") +ylim(0,.2)
+
+q3.rplot = q3.base.plot +
+  geom_segment(aes(x=xstart,xend=xend,y=rucl,yend=rucl,colour=c("blue"),linetype=c("dashed"))) +
+  geom_segment(aes(x=xstart,xend=xend,y=rlcl,yend=rlcl,colour=c("blue"),linetype=c("dashed"))) +
+  opts( title="regression \\(u\\) - chart\n")
+
+q3.splot = q3.base.plot +
+  geom_segment(aes(x=xstart,xend=xend,y=sucl,yend=sucl,colour=c("blue"),linetype=c("dashed"))) +
+  geom_segment(aes(x=xstart,xend=xend,y=slcl,yend=slcl,colour=c("blue"),linetype=c("dashed"))) +
+  opts( title="sigma \\(u\\) - chart\n")
+@ 
+
+<<q3_plot_test,echo=F>>=
+tikz(file="tik/assign4_q3_u_chart.tex",standAlone=TRUE)
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,2)))
+print(q3.rplot,vp=vplayout(1,1))
+print(q3.splot,vp=vplayout(1,2))
+garbage <- dev.off()
+
+system("/usr/texbin/pdflatex -output-directory tik tik/assign4_q3_u_chart.tex")
+
+@ 
+
+\includegraphics{tik/assign4_q3_u_chart}
 
 \subsection{Answer}
+
+The regression limits create tighter limits than the 3 sigma technique. The UCL is consistently slightly larger and the LCL is consistently much larger.
 
 \begin{table*}[h!]
   \ra{1.3}
@@ -243,10 +306,12 @@ k2(6.32)
 method & LCL & UCL \\ \midrule
  3 \(\sigma\) \newline limits & \( \bar{u} - 3\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
  regression \newline limits & \( \bar{u} - k_{2}\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + k_{1}\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+  calculated \newline regression \newline values & \( \bar{u} - 2.05\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3.24\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
   \bottomrule
 \end{tabular}
 \caption{Control Limits for \(u\)-chart}
 \end{table*}
+
 
 
 \section{Question 4}
