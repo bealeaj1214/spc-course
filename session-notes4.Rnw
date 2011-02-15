@@ -314,6 +314,59 @@ method & LCL & UCL \\ \midrule
 
 
 
+\subsection{revised work}
+
+$ \bar{c} = \sfrac{\sum {c_{i} n_{i}}}{\sum n_{i}} $
+
+<<q3_revised_cbar>>=
+sum(q3.data$c * q3.data$n ) /sum(q3.data$n)
+
+cbar =  sum(q3.data$c * q3.data$n ) /sum(q3.data$n)
+
+k1(cbar)
+
+k2(cbar)
+
+
+n<- sort(unique(q3.data$n))
+@ 
+
+
+\begin{table*}[h!]
+  \ra{1.3}
+\begin{tabular}{@{}p{1.5cm}ll@{}} \toprule
+method & LCL & UCL \\ \midrule
+ 3 \(\sigma\) \newline limits & \( \bar{u} - 3\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+ regression \newline limits & \( \bar{u} - k_{2}\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + k_{1}\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+  calculated \newline regression \newline values & \( \bar{u} - 2.42\sqrt{\frac{\bar{u}}{n_{i}}}\) & \( \bar{u} + 3.17\sqrt{\frac{\bar{u}}{n_{i}}}\) \\
+  \bottomrule
+\end{tabular}
+\caption{Control Limits for \(u\)-chart}
+\end{table*}
+
+
+%% data.frame -hint for this setup
+%% data.frame(n=n,triple=3*n,sq=n^2)
+
+
+%% print(xtable(test2),hline.after=NULL,add.to.row=list(pos=list(-1,0,1),command=c('\\toprule','\\midrule','\\bottomrule')))
+%% http://cameron.bracken.bz/sweave-xtable-booktabs  - xtable and booktabs
+
+
+%% begining of longtable customization
+%% print(xtable(test2),hline.after=NULL,add.to.row=list(pos=list(-1),command=c('\\toprule Date & TT num. & Desk & Description & Comments/Next Steps. \\\\ \\midrule \n \\endfirsthead\n')))
+
+
+<<q3_revised_dataframe>>=
+
+q3r.limits <-data.frame(n=n,rlcl = (ubar -2.42*sqrt(ubar/n)),rucl = (ubar + 3.17*sqrt(ubar/n)),slcl = (ubar - 3*sqrt(ubar/n)),sucl = (ubar + 3*sqrt(ubar/n))  )
+
+str(q3r.limits)
+
+@ 
+
+
+
 \section{Question 4}
 Given what was learned about the data in Exercise \#6 on page 129 in
 Assignment 3, would you compute probability limits for an R-chart for
@@ -373,9 +426,6 @@ method & LCL & UCL \\ \midrule
 \end{tabular}
 \caption{Control limits \(\bar{R}\)-chart for Exercise \# 6}
 \end{table*}
-
-
-
 
 
 \section{Question 5}
