@@ -2,6 +2,7 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{xfrac}
+\usepackage{multirow}
 %\usepackage{listings}
 
 % attempt to use fontspec to select fonts 
@@ -27,6 +28,7 @@ library("ggplot2")
 library("tikzDevice")
 options( tikzMetricsDictionary = NULL )
 options( tikzLatex = "/usr/texbin/xelatex" )
+library("xtable")
 
 vplayout <- function(x,y) { viewport(layout.pos.row=x,layout.pos.col=y) }
 @ 
@@ -362,9 +364,21 @@ method & LCL & UCL \\ \midrule
 q3r.limits <-data.frame(n=n,rlcl = (ubar -2.42*sqrt(ubar/n)),rucl = (ubar + 3.17*sqrt(ubar/n)),slcl = (ubar - 3*sqrt(ubar/n)),sucl = (ubar + 3*sqrt(ubar/n))  )
 
 str(q3r.limits)
+@ 
+<<q3_revised_table_body,echo=F>>=
 
+print(xtable(q3r.limits,digits=4),only.contents=T,include.colnames=F,hline.after=NULL,include.rownames=F,file="tex/session4-q3-limits.tex")
 @ 
 
+\begin{table*}[h!]
+  \ra{1.2}
+  \begin{tabular}{@{}rrrrr@{}}\toprule
+    & \multicolumn{2}{c}{regression} & \multicolumn{2}{c}{3 \(\sigma\) }\\ \cmidrule(r){2-3} \cmidrule(r){4-5}
+    n & lcl & ucl & lcl & ucl \\ \midrule
+    \input{session4-q3-limits}
+    \bottomrule
+  \end{tabular}
+  \end{table*}
 
 
 \section{Question 4}
